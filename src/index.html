@@ -7,14 +7,23 @@
     <title>Quiz</title>
 </head>
 <body>
-    <div id="quiz-container">
+    <div id="start-buttons">
+        <button class="start-button" id="start-btn-html">HTML Quiz</button>
+        <button class="start-button" id="start-btn-2">Start Button 2</button>
+        <button class="start-button" id="start-btn-3">Start Button 3</button>
+    </div>
+
+    <div id="go-back-button-wrapper" class="hidden">
+        <button id="go-back-button">Go Back</button>
+    </div>
+    <div id="quiz-container" class="hidden">
         <div id="quiz-question-wrapper">
             <div id="quiz-question">
                 <p>...</p>
             </div>
             <div id="quiz-board">
                 <p id="score-text">Score:</p>
-                <p id="user-score">...</p>
+                <p id="user-score">0</p>
                 <p id="timer-text">Timer:</p>
                 <p id="user-timer">...</p>
             </div>

@@ -1,10 +1,19 @@
-import { htmlQuiz } from "./quizes.js";
+import { HTMLQUIZ, CSSQUIZ, JSQUIZ, loadQuestionsPromise } from "./quizes.js"; // Import the promise
 
-let currentQuiz = 0;
-let  quiz = htmlQuiz.get(currentQuiz);
+let quiz = new Map();
+let currentQuestion = 0;
+let question;
+let score = 0;
 const answers = document.getElementById("quiz-answer-wrapper");
 let timerInterval;
-const totalTime = 30;
+const totalTime = 2;
+
+
+// Wait for the question data to be loaded
+
+function revealAnswer(selected){
+    
+}
 
 let isAnswered = false;
 let answeredCorrectly = false;
@@ -13,30 +22,30 @@ function handleUserChoice(evt) {
 
     const target = evt.target.closest(".quiz-answer");
     if (target && target.classList.contains("quiz-answer")) {
-        const buttonID = parseInt(evt.target.id); // Convert to number
-        // Check if the clicked answer is correct
-        if (buttonID === quiz.answer) {
-            target.classList.add('correct');
-            currentQuiz++;
+        const buttonID = parseInt(target.id); 
+        if (buttonID == question.answer) {
+            target.classList.add('selected-correctly');
+            currentQuestion++;
+            score++;
             answeredCorrectly = true;
         } else {
             target.classList.add('selected');
-            document.getElementById(quiz.answer).classList.add('correct'); // Highlight correct answer
+            document.getElementById(question.answer).classList.add('correct'); 
         }
 
-        // Highlight wrong answers (all except the correct and clicked ones)
         for (let i = 0; i <= 3; i++) {
-            if (i !== buttonID && i !== quiz.answer) {
+            if (i !== buttonID && i != question.answer) {
                 document.getElementById(i).classList.add('wrong');
             }
         }
 
         // Reload after a delay
         clearInterval(timerInterval);
+        updateScore();
         isAnswered = true;
         
         if(answeredCorrectly){
-            changeQuiz();
+            changequestion();
         }
         else{
             setTimeout(function() {
@@ -47,29 +56,39 @@ function handleUserChoice(evt) {
     }
 };
 
-function loadQuiz(){
-    document.getElementById("quiz-question").innerHTML = quiz.question;
-    const guesses = quiz.guesses;
-    document.getElementById("guess-0").innerHTML = guesses.get(0);
-    document.getElementById("guess-1").innerHTML = guesses.get(1);
-    document.getElementById("guess-2").innerHTML = guesses.get(2);
-    document.getElementById("guess-3").innerHTML = guesses.get(3);
-    for (let i = 0; i <= 3; i++) {
-        document.getElementById(i).setAttribute('class', 'quiz-answer');
-    }
+
+function loadquestion(){
+    isAnswered = false;
+    clearInterval(timerInterval);
+    document.getElementById("quiz-question").textContent = question.question;
+    const guesses = question.guesses;
+    let idx = 0;
+    guesses.forEach(guess => {
+        document.getElementById(idx.toString()).setAttribute('class', 'quiz-answer');
+        document.getElementById(`guess-${idx++}`).textContent = guess;
+    })
 
     startTimer(totalTime);
 }
 
-function changeQuiz(){
+function changequestion(){
     setTimeout(function() {
-        if(currentQuiz >= htmlQuiz.size){
-            currentQuiz = 0;
+        if(currentQuestion >= quiz.size){
+            return;
         }
-        quiz = htmlQuiz.get(currentQuiz)
-        loadQuiz();
+        question = quiz.get(currentQuestion)
+        loadquestion();
     }, 3000)
-    isAnswered = false;
+}
+
+function resetquestion(){
+    score = 0;
+    currentQuestion = 0;
+    question = quiz.get(currentQuestion);
+}
+
+function updateScore() {
+    document.getElementById("user-score").innerHTML = `${score}/${quiz.size}`;
 }
 
 function startTimer(seconds) {
@@ -85,23 +104,45 @@ function startTimer(seconds) {
             clearInterval(timerInterval);
             if (!isAnswered) {
                 // Handle timeout (e.g., highlight correct answer and reload)
-                document.getElementById(quiz.answer).classList.add('correct');
+                document.getElementById(question.answer).classList.add('correct');
                 for (let i = 0; i <= 3; i++) {
-                    if (i !== quiz.answer) {
+                    if (i != question.answer) {
                         document.getElementById(i).classList.add('wrong');
+                        isAnswered = true;
                     }
                 }
                 
-                currentQuiz++;
-                setTimeout(() => changeQuiz(), 3000);
+                currentQuestion++;
+                setTimeout(() => changequestion(), 3000);
             }
         }
     }, 1000);
 }
 
-answers.addEventListener("click", handleUserChoice);
+document.addEventListener("DOMContentLoaded", () => {
+    const htmlButton = document.getElementById("start-btn-html")
+    const startButtonContainer = document.getElementById("start-buttons");
+    const questionContainer = document.getElementById("quiz-container");
 
+    htmlButton.addEventListener("click", () => {
+        startButtonContainer.classList.add("hidden");
+        questionContainer.classList.remove("hidden");
+        document.getElementById('go-back-button-wrapper').classList.remove("hidden");
+        loadQuestionsPromise.then(() => {
+            quiz = HTMLQUIZ;
+            question = quiz.get(currentQuestion);
+            loadquestion(); 
+            document.getElementById("user-score").innerHTML = `${score}/${quiz.size}`;
+            answers.addEventListener("click", handleUserChoice);
+        });
+    });
 
-onload = (event) => {
-    loadQuiz();
-}
+});
+document.getElementById("go-back-button-wrapper").addEventListener("click", () => {
+    const startButtonContainer = document.getElementById("start-buttons");
+    const questionContainer = document.getElementById("quiz-container");
+    startButtonContainer.classList.remove("hidden");
+    resetquestion();
+    questionContainer.classList.add("hidden");
+    document.getElementById('go-back-button-wrapper').classList.add("hidden");
+})

@@ -1,111 +1,234 @@
-body{
+/* General Styles */
+body {
     display: flex;
-    background-color: #0E0E0E;
+    background-color: #1a1a1a;
     height: 100vh;
     width: 100vw;
     user-select: none;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    justify-content: center;
+    align-items: center;
 }
-#quiz-container{
-    width: 80vw;
-    height: 80vh;
-    background-color: darkgrey;;
-    margin: auto;
+
+/* Main Quiz Container */
+#quiz-container {
+    width: 70vw;
+    max-width: 900px;
+    height: 70vh;
+    background-color: #2c2f38;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Hide any overflow from quiz container */
 }
-#quiz-question-wrapper{
+
+/* Quiz Question Section */
+#quiz-question-wrapper {
     display: flex;
     align-items: center;
-    width: 100%;
-    height: 20%;
-    background-color: white;
+    justify-content: space-between;
+    background-color: #ffffff;
+    padding: 20px;
+    border-bottom: 2px solid #ccc;
 }
-#quiz-question{
+
+#quiz-question {
+    font-size: 32px;
+    color: #333;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: left;
+    flex-grow: 1;
+}
+
+#quiz-board {
     display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
     align-items: center;
-    height: 100%;
-    width: 80%;
-    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; 
-    font-size: 36px; 
-    font-style: normal;
-    color: black;
+    background-color: #3b3f46;
+    color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    width: 30%;
 }
-#quiz-board{
-    display: flex;
-    flex-wrap: wrap;
-    height: 100%;
-    width: 20%;
-    border: 3px solid Purple;
-    border-radius: 30px;
+
+#score-text, #user-score, #timer-text, #user-timer {
+    margin: 5px 0;
+    text-align: center;
+    font-size: 18px;
 }
-#score-text{
-    width: 25%;
-    height: 5%;
+
+#score-text, #timer-text {
+    font-weight: 600;
+}
+
+#user-score, #user-timer {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* Answer Section */
+#quiz-answer-wrapper {
+    display: grid;
+    grid-template-rows: repeat(4, 1fr); /* Ensure 4 equal-height rows for answers */
+    gap: 15px;
     padding: 20px;
+    height: 50%; /* Limit the height of the answers wrapper */
+    overflow: hidden; /* Prevent any vertical scrollbar */
 }
-#user-score{
-    width: 25%;
-    height: 5%;
-    padding: 20px;
-}
-#timer-text{
-    width: 25%;
-    height: 15%;
-    padding: 20px;
-}
-#user-timer{
-    width: 25%;
-    height: 15%;
-    padding: 20px;
-}
-#quiz-answer-wrapper{
+
+/* Common Style for Answers */
+.quiz-answer, .correct, .wrong, .selected, .selected-correctly {
     width: 100%;
-    height: 80%;
-}
-.quiz-answer{
-    width: 100%;
-    height: 25%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; 
-    font-size: 24px; 
-    font-style: normal
+    font-size: 20px;
+    font-weight: 500;
+    text-align: center;
+    border-radius: 8px;
+    box-sizing: border-box; /* Ensures padding and border are included in width/height */
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
 }
-.quiz-answer:hover{
-    background-color: blue;
-    color: red;
+
+/* Hover Effects */
+.quiz-answer:hover {
+    background-color: #4caf50;
+    color: white;
     cursor: pointer;
-    box-sizing: border-box;
+    transform: scale(1.05); /* Scale only within bounds */
+    transition: transform 0.2s ease-out;
 }
-.correct{
-    background-color: green;
-    width: 100%;
-    height: 25%;
+
+/* Correct Answer Styling */
+.correct {
+    background-color: #4caf50;
+    color: white;
+}
+
+/* Wrong Answer Styling */
+.wrong {
+    background-color: #f44336;
+    color: white;
+}
+
+/* Selected Answer Styling */
+.selected {
+    background-color: #2196f3;
+    color: white;
+}
+
+/* Selected Correctly Styling */
+.selected-correctly {
+    background-color: #4caf50;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Position the "Go Back" Button outside the quiz container */
+#go-back-button-wrapper {
+    position: fixed;
+    top: 3%;
+    right: 3%;
+    z-index: 10; /* Ensure it's above other elements */
+}
+
+#go-back-button {
+    background-color: #2196f3;
+    color: white;
+    font-size: 2vw;
+    font-weight: 600;
+    padding: 1.5%;
+    border: none;
+    border-radius: 1.5%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover Effect */
+#go-back-button:hover {
+    background-color: #1976d2;
+    transform: scale(1.05);
+}
+
+/* Focus Effect for Accessibility */
+#go-back-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.6); /* Focus outline */
+}
+
+/* Active (click) Effect */
+#go-back-button:active {
+    transform: scale(0.98);
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+    #go-back-button {
+        font-size: 4vw;
+        padding: 2%;
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Initial styling for the start buttons */
+#start-buttons {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; 
-    font-size: 24px; 
-    font-style: normal
+    height: 100vh;
+    gap: 20px;
 }
-.wrong{
-    background-color: red;
-    width: 100%;
-    height: 25%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; 
-    font-size: 24px; 
-    font-style: normal
+
+.start-button {
+    padding: 20px 30px;
+    font-size: 2vw;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
-.selected{
-    background-color: blue;
-    width: 100%;
-    height: 25%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; 
-    font-size: 24px; 
-    font-style: normal
+
+.start-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.start-button:active {
+    transform: scale(0.98);
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #quiz-container {
+        width: 90vw;
+        height: 80vh;
+    }
+
+    #quiz-question-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #quiz-board {
+        width: 100%;
+        height: auto;
+        margin-top: 10px;
+    }
+
+    .quiz-answer, .correct, .wrong, .selected, .selected-correctly {
+        font-size: 18px;
+        height: 60px;
+    }
 }

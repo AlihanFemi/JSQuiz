@@ -7,36 +7,61 @@ class Question{
         this.guesses = guesses;
         this.answer = answer;
     }
+}
 
-    get answer(){
-        return this.answer;
-    }
-    get guesses(){
-        return this.guesses;
-    }
-    get question(){
-        return this.question;
+const PATH = '/get/questions';
+export const HTMLQUIZ = new Map();
+export const CSSQUIZ = new Map();
+export const JSQUIZ = new Map();
+
+async function loadQuestions() {
+    try {
+        const response = await fetch(PATH); // Replace with your file path
+        if (!response.ok) {
+            throw new Error(`Failed to fetch file: ${response.statusText}`);
+        }
+        const text = await response.text(); // Read file contents as text
+        parseQuestions(text); // Parse and use the questions
+    } catch (error) {
+        console.error('Error loading questions:', error);
     }
 }
 
+function answersAsMap(answers){
+    let map = new Map();
+    let id = 0;
+    answers.forEach(answer => {
+        map.set(id++, answer);
+    });
+    return map;
+}
 
-export const htmlQuiz = new Map();
+function keyByValue(map, KeyValue) {
+    let result;
+    map.forEach((value, key) => {
+        result = value === KeyValue ? key : result;
+    });
+    return result;
+}
 
-htmlQuiz.set(0, new Question(
-    "What is full form of HTML?", new Map([
-        [0, "Hyper  thermal Maximum Language"],
-        [1, "Hypertext Mathematic Language"],
-        [2, "Hypertext Markup Language"],
-        [3, "None Of these"]
-    ]),
-    2
-));
+function loadQuestionsIntoMap(map, questions) {
+    let id = 0;
+    questions.forEach(question => {
+        const guessMap = answersAsMap(question.Answers)
+        map.set(id++, new Question(question.Question, guessMap, keyByValue(guessMap, question.CorrectAnswer)))
+    });
+}
 
-htmlQuiz.set(1, new Question("Who invented HTML", new Map([
-    [0, "Bill Gates"],
-    [1, "Steve Jobs"],
-    [2, "Mark Zuckerberg"],
-    [3, "Tim Berners Lee"]
-    ]), 
-    3
-));
+function parseQuestions(text) {
+    const data = JSON.parse(text);
+
+    loadQuestionsIntoMap(HTMLQUIZ, data.HTML);
+    loadQuestionsIntoMap(CSSQUIZ, data.CSS);
+    loadQuestionsIntoMap(JSQUIZ, data.JavaScript);
+};
+
+async function getQuestions(){
+    await loadQuestions();
+    return true;
+}
+export let loadQuestionsPromise = getQuestions(); 

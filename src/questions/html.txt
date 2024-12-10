@@ -1,0 +1,29 @@
+What is full form of HTML?;Hyper  thermal Maximum Language,Hypertext Mathematic Language,Hypertext Markup Language,None Of these.,;2
+Who invented HTML;20 sec,Bill Gates,Steve Jobs,Mark Zuckerberg;2
+HTML is a language of 	.;20 sec,Tags,Tagged,Commands;2
+This tag is used to create paragraphs in my web page;20 sec,<BR>,<P>,<HR>;2
+We create our web page in;20 sec,Web Browser,MS Paint,MS Excel;2
+tag is used for giving title to our web page;20 sec,<head> tag,<HTML> tag,<Title> tag;2
+This tag is used to give a line break in a web page.;20 sec,<P>,<BR>,<HR>;2
+<sup> tag is used to write text;20 sec,on same level of the remaining text,above the remaining text,below the remaining text;2
+We can change the color, size and style of the text with;20 sec,<style>,<color>,<font>;2
+We can make our text appear in Bold using this tag:;20 sec,<B>,<I>,<U>;2
+We can make our text italicized with;20 sec,<B>,<U>,<I>;2
+We can write the text appear below the remaining text by using 	tag;<U>,20 sec,<SUP>,<SUB>;2
+We can see our web page in this software.;20 sec,Text Editor,Web Browser,MS Word;2
+What do HTML elements use tags for?;To structure content,To make content noticeable,To build content,<list> <list item>;2
+Which of these tags are all tags?;TABLE,TR,TD,Length;2
+Who invented HTML?;Tim Berners-Lee,Tim Tam Lee,Tim LeeSin,Tim Bernie Sanders;2
+where we write the HTML Code ?;Notepad,Word,Excel,Power point;2
+In HTML paragraphs are shown using?;<p>,<p/>,<p/><p>,<p></p>;2
+Which tags sets italic text?;<text=italic>,<italic>,<i1>,<i>,;2
+What type of standard is HTML?;Defacto,Dejure,Industry,Open;2
+In HTML we use opening and closing...;tags,elements,properties,attributes;2
+Does spacing matter in a html document;No,Yes,,- Quiz,How do you create a paragraph in html?;2
+HTML is used to create what?;mobile apps,webpages,programs,animations;2
+Which tags sets Heading Style 1?;heading,<head>,<h1>,header;2
+Where are the <html> and </html> tags located?;Both  at the beginning,<html> at the beginning, </html> at the end,<html> at the end, </html> at the begining?,They are codes? Eh?;2
+Which HTML tag indicates the start of an ordered list?;</li>,<li>,<ol>,<ul>;2
+Why would you include meta tags when creating a website?;They make it look nice,They provide keywords to search engines,They define the fonts used,They hide your website from the public,;2
+Between which two tags should ALL of your website content go?;60 sec,<html> </html>,<p> </p>,<head> </head>;2
+What is the command to create a TABLE in HTML?;<t>,<table>,padding,margin;2
