@@ -20,7 +20,10 @@ function verifyAnswer(selected, answer){
             document.getElementById(selected).classList.add('selected');
             document.getElementById(answer).classList.add('correct');
         }
-        else if(i !== answer){
+        else if(i === answer){
+            document.getElementById(answer).classList.add('correct');
+        }
+        else{
             document.getElementById(i).classList.add('wrong');
         }
     }
@@ -81,11 +84,11 @@ function updateScore() {
 function startTimer(seconds) {
     const timerDisplay = document.getElementById("user-timer");
     let timeRemaining = seconds;
-    timerDisplay.innerHTML = timeRemaining;
+    timerDisplay.innerHTML = `${timeRemaining} seconds`;
 
     timerInterval = setInterval(() => {
         timeRemaining--;
-        timerDisplay.innerHTML = timeRemaining;
+    timerDisplay.innerHTML = `${timeRemaining} seconds`;
 
         if (timeRemaining <= 0) {
             clearInterval(timerInterval);
