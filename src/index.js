@@ -1,58 +1,45 @@
-import { HTMLQUIZ, CSSQUIZ, JSQUIZ, loadQuestionsPromise } from "./quizes.js"; // Import the promise
+import { HTMLQUIZ, CSSQUIZ, JSQUIZ, loadQuestionsPromise } from "./quizes.js";
 
 let quiz = new Map();
 let currentQuestion = 0;
 let question;
 let score = 0;
+let isAnswered = false;
 const answers = document.getElementById("quiz-answer-wrapper");
 let timerInterval;
 const totalTime = 2;
 
-
-// Wait for the question data to be loaded
-
-function revealAnswer(selected){
-    
+function verifyAnswer(selected, answer){
+    currentQuestion++;
+    for(let i = 0; i <= 3; i++){
+        if(i === selected && selected === answer){
+            score++;
+            document.getElementById(selected).classList.add('selected-correctly');
+        }
+        else if(i === selected){
+            document.getElementById(selected).classList.add('selected');
+            document.getElementById(answer).classList.add('correct');
+        }
+        else if(i !== answer){
+            document.getElementById(i).classList.add('wrong');
+        }
+    }
+    isAnswered = true;
 }
 
-let isAnswered = false;
-let answeredCorrectly = false;
 function handleUserChoice(evt) {
     if (isAnswered) return;
 
     const target = evt.target.closest(".quiz-answer");
     if (target && target.classList.contains("quiz-answer")) {
         const buttonID = parseInt(target.id); 
-        if (buttonID == question.answer) {
-            target.classList.add('selected-correctly');
-            currentQuestion++;
-            score++;
-            answeredCorrectly = true;
-        } else {
-            target.classList.add('selected');
-            document.getElementById(question.answer).classList.add('correct'); 
-        }
 
-        for (let i = 0; i <= 3; i++) {
-            if (i !== buttonID && i != question.answer) {
-                document.getElementById(i).classList.add('wrong');
-            }
-        }
+        verifyAnswer(buttonID, question.answer)
 
-        // Reload after a delay
         clearInterval(timerInterval);
         updateScore();
-        isAnswered = true;
         
-        if(answeredCorrectly){
-            changequestion();
-        }
-        else{
-            setTimeout(function() {
-                location.reload();
-            }, 3000);
-        }
-        
+        changequestion();
     }
 };
 
@@ -103,46 +90,46 @@ function startTimer(seconds) {
         if (timeRemaining <= 0) {
             clearInterval(timerInterval);
             if (!isAnswered) {
-                // Handle timeout (e.g., highlight correct answer and reload)
-                document.getElementById(question.answer).classList.add('correct');
-                for (let i = 0; i <= 3; i++) {
-                    if (i != question.answer) {
-                        document.getElementById(i).classList.add('wrong');
-                        isAnswered = true;
-                    }
-                }
-                
-                currentQuestion++;
-                setTimeout(() => changequestion(), 3000);
+                verifyAnswer(-1, question.answer)
+                changequestion()
             }
         }
     }, 1000);
 }
 
+function quizSetter(src){
+    document.getElementById("start-buttons").classList.add("hidden");
+    document.getElementById("quiz-container").classList.remove("hidden");
+    document.getElementById('go-back-button-wrapper').classList.remove("hidden");
+    loadQuestionsPromise.then(() => {
+        quiz = src;
+        question = quiz.get(currentQuestion);
+        loadquestion(); 
+        document.getElementById("user-score").innerHTML = `${score}/${quiz.size}`;
+        answers.addEventListener("click", handleUserChoice);
+    });
+    
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const htmlButton = document.getElementById("start-btn-html")
-    const startButtonContainer = document.getElementById("start-buttons");
-    const questionContainer = document.getElementById("quiz-container");
+    const cssButton = document.getElementById("start-btn-css")
+    const jsButton = document.getElementById("start-btn-js")
 
     htmlButton.addEventListener("click", () => {
-        startButtonContainer.classList.add("hidden");
-        questionContainer.classList.remove("hidden");
-        document.getElementById('go-back-button-wrapper').classList.remove("hidden");
-        loadQuestionsPromise.then(() => {
-            quiz = HTMLQUIZ;
-            question = quiz.get(currentQuestion);
-            loadquestion(); 
-            document.getElementById("user-score").innerHTML = `${score}/${quiz.size}`;
-            answers.addEventListener("click", handleUserChoice);
-        });
+        quizSetter(HTMLQUIZ)
+    });
+    cssButton.addEventListener("click", () => {
+        quizSetter(CSSQUIZ)
+    });
+    jsButton.addEventListener("click", () => {
+        quizSetter(JSQUIZ)
     });
 
 });
 document.getElementById("go-back-button-wrapper").addEventListener("click", () => {
-    const startButtonContainer = document.getElementById("start-buttons");
-    const questionContainer = document.getElementById("quiz-container");
-    startButtonContainer.classList.remove("hidden");
-    resetquestion();
-    questionContainer.classList.add("hidden");
+    document.getElementById("start-buttons").classList.remove("hidden");
+    document.getElementById("quiz-container").classList.add("hidden");
     document.getElementById('go-back-button-wrapper').classList.add("hidden");
+    resetquestion();
 })

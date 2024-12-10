@@ -96,7 +96,7 @@ body {
 
 /* Hover Effects */
 .quiz-answer:hover {
-    background-color: #4caf50;
+    background-color: #2196f3;
     color: white;
     cursor: pointer;
     transform: scale(1.05); /* Scale only within bounds */
