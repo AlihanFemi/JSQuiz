@@ -215,6 +215,19 @@ body {
     transform: scale(0.98);
 }
 
+.p-0{
+    border: 1px solid red;
+}
+.p-1{
+    border: 1px solid green;
+}
+.p-2{
+    border: 1px solid blue;
+}
+.p-3{
+    border: 1px solid yellow;
+}
+
 @media (max-width: 768px) {
     #quiz-container {
         width: 90vw;

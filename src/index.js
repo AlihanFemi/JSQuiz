@@ -9,7 +9,7 @@ let playerCount = null;
 let isAnswered = false;
 const answers = document.getElementById("quiz-answer-wrapper");
 let timerInterval;
-const totalTime = 1;
+const totalTime = 3;
 let chosenQuiz = "";
 
 function verifyAnswer(selected, answer){
@@ -46,7 +46,12 @@ function handleUserChoice(evt) {
     }
 };
 
+function updateBoard(playerID){
+    document.getElementById(`quiz-container`).classList.add(`p-${playerID}`);
+}
+
 function loadquestion(){
+    updateBoard(currentPlayer);
     isAnswered = false;
     clearInterval(timerInterval);
     document.getElementById("quiz-question").textContent = question.question;
