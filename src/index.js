@@ -9,7 +9,7 @@ let playerCount = null;
 let isAnswered = false;
 const answers = document.getElementById("quiz-answer-wrapper");
 let timerInterval;
-const totalTime = 2;
+const totalTime = 1;
 let chosenQuiz = "";
 
 function verifyAnswer(selected, answer){
@@ -170,5 +170,6 @@ document.getElementById("go-back-button-wrapper").addEventListener("click", () =
     document.getElementById("start-buttons").classList.remove("hidden");
     document.getElementById("quiz-container").classList.add("hidden");
     document.getElementById('go-back-button-wrapper').classList.add("hidden");
+    document.getElementById('endgame-screen').classList.add("hidden");
     resetquestion();
 });
