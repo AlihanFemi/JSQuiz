@@ -9,19 +9,18 @@ class Question{
     }
 }
 
-const PATH = '/get/questions';
 export const HTMLQUIZ = new Map();
 export const CSSQUIZ = new Map();
 export const JSQUIZ = new Map();
 
 async function loadQuestions() {
     try {
-        const response = await fetch(PATH); // Replace with your file path
+        const response = await fetch('/get/questions'); 
         if (!response.ok) {
             throw new Error(`Failed to fetch file: ${response.statusText}`);
         }
-        const text = await response.text(); // Read file contents as text
-        parseQuestions(text); // Parse and use the questions
+        const text = await response.text();
+        parseQuestions(text);
     } catch (error) {
         console.error('Error loading questions:', error);
     }

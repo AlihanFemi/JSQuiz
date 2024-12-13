@@ -36,16 +36,12 @@ function handleUserChoice(evt) {
     const target = evt.target.closest(".quiz-answer");
     if (target && target.classList.contains("quiz-answer")) {
         const buttonID = parseInt(target.id); 
-
         verifyAnswer(buttonID, question.answer)
-
         clearInterval(timerInterval);
         updateScore();
-        
         changequestion();
     }
 };
-
 
 function loadquestion(){
     isAnswered = false;
@@ -57,7 +53,6 @@ function loadquestion(){
         document.getElementById(idx.toString()).setAttribute('class', 'quiz-answer');
         document.getElementById(`guess-${idx++}`).textContent = guess;
     })
-
     startTimer(totalTime);
 }
 
@@ -85,18 +80,17 @@ function startTimer(seconds) {
     const timerDisplay = document.getElementById("user-timer");
     let timeRemaining = seconds;
     timerDisplay.innerHTML = `${timeRemaining} seconds`;
-
     timerInterval = setInterval(() => {
         timeRemaining--;
-    timerDisplay.innerHTML = `${timeRemaining} seconds`;
+        timerDisplay.innerHTML = `${timeRemaining} seconds`;
 
-        if (timeRemaining <= 0) {
-            clearInterval(timerInterval);
-            if (!isAnswered) {
-                verifyAnswer(-1, question.answer)
-                changequestion()
+            if (timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                if (!isAnswered) {
+                    verifyAnswer(-1, question.answer)
+                    changequestion()
+                }
             }
-        }
     }, 1000);
 }
 
@@ -128,11 +122,10 @@ document.addEventListener("DOMContentLoaded", () => {
     jsButton.addEventListener("click", () => {
         quizSetter(JSQUIZ)
     });
-
 });
 document.getElementById("go-back-button-wrapper").addEventListener("click", () => {
     document.getElementById("start-buttons").classList.remove("hidden");
     document.getElementById("quiz-container").classList.add("hidden");
     document.getElementById('go-back-button-wrapper').classList.add("hidden");
     resetquestion();
-})
+});
