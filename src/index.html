@@ -13,6 +13,14 @@
         <button class="start-button" id="start-btn-js">JS Quiz</button>
     </div>
 
+    <div id="player-buttons" class="hidden">
+        <p id="player-number-text" style="color: white">Number of players</p>
+        <button class="player-button" id="player-1">1</button>
+        <button class="player-button" id="player-2">2</button>
+        <button class="player-button" id="player-3">3</button>
+        <button class="player-button" id="player-4">4</button>
+    </div>
+
     <div id="go-back-button-wrapper" class="hidden">
         <button id="go-back-button">Go Back</button>
     </div>
@@ -22,8 +30,6 @@
                 <p>...</p>
             </div>
             <div id="quiz-board">
-                <p id="score-text">Score:</p>
-                <p id="user-score">0</p>
                 <p id="timer-text">Timer:</p>
                 <p id="user-timer">...</p>
             </div>
@@ -42,6 +48,12 @@
                 <p id="guess-3">...</p>
             </div>
         </div>
+    </div>
+    <div id="endgame-screen" style="color: white;" class="hidden">
+        <p id="score-0" style="color: red;" class="hidden"></p>
+        <p id="score-1" style="color: green;" class="hidden"></p>
+        <p id="score-2" style="color: blue;" class="hidden"></p>
+        <p id="score-3" style="color: yellow;" class="hidden"></p>
     </div>
     <script type="module" src="./index.js"></script>
 </body>

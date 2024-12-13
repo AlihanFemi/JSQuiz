@@ -184,12 +184,34 @@ body {
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
+.player-button {
+    padding: 20px 30px;
+    font-size: 2vw;
+    background-color: rgba(33, 150, 243, 0.6);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+
 .start-button:hover {
     background-color: #45a049;
     transform: scale(1.05);
 }
 
 .start-button:active {
+    transform: scale(0.98);
+}
+
+.player-button:hover {
+    background-color: red   ;
+    transform: scale(1.05);
+}
+
+.player-button:active {
     transform: scale(0.98);
 }
 

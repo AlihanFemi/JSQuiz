@@ -1,19 +1,21 @@
 import { HTMLQUIZ, CSSQUIZ, JSQUIZ, loadQuestionsPromise } from "./quizes.js";
 
 let quiz = new Map();
+let players = new Map();
 let currentQuestion = 0;
+let currentPlayer = 0;
 let question;
-let score = 0;
+let playerCount = null;
 let isAnswered = false;
 const answers = document.getElementById("quiz-answer-wrapper");
 let timerInterval;
 const totalTime = 2;
+let chosenQuiz = "";
 
 function verifyAnswer(selected, answer){
-    currentQuestion++;
     for(let i = 0; i <= 3; i++){
         if(i === selected && selected === answer){
-            score++;
+            players.set(currentPlayer, (players.get(currentPlayer))+1);
             document.getElementById(selected).classList.add('selected-correctly');
         }
         else if(i === selected){
@@ -27,6 +29,8 @@ function verifyAnswer(selected, answer){
             document.getElementById(i).classList.add('wrong');
         }
     }
+    currentQuestion++;
+    currentPlayer++;
     isAnswered = true;
 }
 
@@ -38,7 +42,6 @@ function handleUserChoice(evt) {
         const buttonID = parseInt(target.id); 
         verifyAnswer(buttonID, question.answer)
         clearInterval(timerInterval);
-        updateScore();
         changequestion();
     }
 };
@@ -56,9 +59,22 @@ function loadquestion(){
     startTimer(totalTime);
 }
 
+function showEndScreen(){
+    document.getElementById('endgame-screen').classList.remove("hidden");
+    document.getElementById('quiz-container').classList.add("hidden");
+    players.forEach((value, key) => {
+        document.getElementById(`score-${key}`).classList.remove("hidden");
+        document.getElementById(`score-${key}`).textContent = `Player ${key + 1}: ${value}`;
+    });
+}
+
 function changequestion(){
     setTimeout(function() {
+        if(currentPlayer >= playerCount){
+            currentPlayer = 0;
+        }
         if(currentQuestion >= quiz.size){
+            showEndScreen();
             return;
         }
         question = quiz.get(currentQuestion)
@@ -67,13 +83,12 @@ function changequestion(){
 }
 
 function resetquestion(){
-    score = 0;
     currentQuestion = 0;
+    currentPlayer = 0;
+    chosenQuiz = "";
+    playerCount = null;
+    players = new Map();
     question = quiz.get(currentQuestion);
-}
-
-function updateScore() {
-    document.getElementById("user-score").innerHTML = `${score}/${quiz.size}`;
 }
 
 function startTimer(seconds) {
@@ -95,17 +110,42 @@ function startTimer(seconds) {
 }
 
 function quizSetter(src){
-    document.getElementById("start-buttons").classList.add("hidden");
+    document.getElementById("player-buttons").classList.add("hidden");
     document.getElementById("quiz-container").classList.remove("hidden");
     document.getElementById('go-back-button-wrapper').classList.remove("hidden");
     loadQuestionsPromise.then(() => {
         quiz = src;
         question = quiz.get(currentQuestion);
+        currentPlayer = 0;
         loadquestion(); 
-        document.getElementById("user-score").innerHTML = `${score}/${quiz.size}`;
         answers.addEventListener("click", handleUserChoice);
     });
     
+}
+
+function getPlayerCount(evt){
+    const target = evt.target.closest(".player-button");
+    let targetIDArray = target.id.split('-');
+    playerCount = parseInt(targetIDArray[1]);
+    for(let i = 0; i < playerCount; i++){
+        players.set(i, 0);
+    }
+    if(chosenQuiz === "HTML"){
+        quizSetter(HTMLQUIZ);
+    }
+    else if(chosenQuiz === "CSS"){
+        quizSetter(CSSQUIZ);
+    }
+    else if(chosenQuiz === "JS"){
+        quizSetter(JSQUIZ);
+    }
+}   
+
+function setPlayerCount(){
+    document.getElementById("start-buttons").classList.add("hidden");
+    document.getElementById("player-buttons").classList.remove("hidden");
+    const count = document.getElementById("player-buttons");
+    count.addEventListener("click", getPlayerCount);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -114,13 +154,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const jsButton = document.getElementById("start-btn-js")
 
     htmlButton.addEventListener("click", () => {
-        quizSetter(HTMLQUIZ)
+        chosenQuiz = "HTML";
+        setPlayerCount();
     });
     cssButton.addEventListener("click", () => {
-        quizSetter(CSSQUIZ)
+        chosenQuiz = "CSS";
+        setPlayerCount();
     });
     jsButton.addEventListener("click", () => {
-        quizSetter(JSQUIZ)
+        chosenQuiz = "JS";
+        setPlayerCount();
     });
 });
 document.getElementById("go-back-button-wrapper").addEventListener("click", () => {
